@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> عملتلك جنينه ورد اهو ياستى ابسطى 🌻</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sun-yellow: #ff2003;
+      --sun-orange: #fb0d00;
+      --sun-brown: #582f0e;
+      --sakura-pink: #ff758f;
+      --bg-cream: #fffdf0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #fffdf0 0%, #fefae0 50%, #e0fbfc 100%);
+      color: #3d2c2e;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* شاشة الترحيب لضمان تشغيل الأغنية فوراً مع أول ضغطة */
+    #welcome-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #fffdf0 0%, #fefae0 60%, #fde2e4 100%);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 25px;
+      cursor: pointer;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    #welcome-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .welcome-card {
+      background: rgba(255, 255, 255, 0.95);
+      border: 3px solid var(--sun-yellow);
+      border-radius: 35px;
+      padding: 45px 35px;
+      max-width: 460px;
+      width: 100%;
+      box-shadow: 0 25px 60px rgba(251, 133, 0, 0.25);
+      animation: pulseCard 2s infinite alternate;
+    }
+
+    @keyframes pulseCard {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.03); }
+    }
+
+    .btn-enter-site {
+      background: linear-gradient(135deg, var(--sun-yellow), var(--sun-orange));
+      color: white;
+      border: none;
+      padding: 16px 38px;
+      border-radius: 50px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 900;
+      cursor: pointer;
+      margin-top: 20px;
+      box-shadow: 0 12px 25px rgba(251, 133, 0, 0.35);
+    }
+
+    /* طبقة الورود الخلفية والتفاعلية */
+    #garden-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .flower-node {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      filter: drop-shadow(0 12px 18px rgba(88, 47, 14, 0.2));
+      animation: gentleSway 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes gentleSway {
+      0% { transform: translate(-50%, -50%) rotate(-5deg) scale(1); }
+      100% { transform: translate(-50%, -53%) rotate(5deg) scale(1.05); }
+    }
+
+    .pop-in {
+      transform-origin: 100px 100px;
+      animation: popScale 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes popScale {
+      0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    /* شريط التنقل العلوي المشترك */
+    .navbar {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+      padding: 12px 20px;
+      border-bottom: 2px solid var(--sun-yellow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 6px 20px rgba(251, 133, 0, 0.1);
+    }
+
+    .nav-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      max-width: 1050px;
+      margin: 0 auto;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      background: #fff8e7;
+      color: var(--sun-brown);
+      border: 1.5px solid var(--sun-yellow);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .nav-btn:hover {
+      background: #fefae0;
+      transform: translateY(-2px);
+    }
+
+    .nav-btn.active {
+      background: linear-gradient(135deg, var(--sun-yellow), var(--sun-orange));
+      color: white;
+      border-color: var(--sun-orange);
+      box-shadow: 0 4px 12px rgba(251, 133, 0, 0.3);
+    }
+
+    .music-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff8e7;
+      padding: 6px 14px;
+      border-radius: 50px;
+      border: 1.5px solid var(--sun-yellow);
+    }
+
+    .music-btn {
+      background: var(--sun-orange);
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .music-btn:hover {
+      background: var(--sun-brown);
+    }
+
+    .song-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--sun-brown);
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* حاوية الصفحات */
+    .main-wrapper {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      max-width: 880px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 35px 20px 60px;
+    }
+
+    .page-section {
+      display: none;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(15px);
+      border: 2px solid var(--sun-yellow);
+      border-radius: 32px;
+      padding: 45px 35px;
+      text-align: center;
+      box-shadow: 0 20px 45px rgba(251, 133, 0, 0.14);
+      animation: pageSlide 0.45s ease;
+    }
+
+    .page-section.active {
+      display: block;
+    }
+
+    @keyframes pageSlide {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #fefae0;
+      color: var(--sun-orange);
+      padding: 6px 18px;
+      border-radius: 30px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      border: 1px solid var(--sun-yellow);
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      color: var(--sun-orange);
+      font-size: 2.5rem;
+      margin-bottom: 14px;
+      font-weight: 900;
+    }
+
+    .desc-text {
+      font-size: 1.18rem;
+      line-height: 1.8;
+      color: var(--sun-brown);
+      max-width: 640px;
+      margin: 0 auto 25px;
+    }
+
+    .hero-flower-box {
+      width: 210px;
+      height: 210px;
+      margin: 15px auto 20px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .hero-flower-box:hover {
+      transform: scale(1.08) rotate(12deg);
+    }
+
+    .tap-hint {
+      font-size: 0.95rem;
+      color: var(--sun-orange);
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .nav-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 35px;
+      padding-top: 22px;
+      border-top: 1.5px dashed var(--sun-yellow);
+    }
+
+    .btn-next {
+      background: linear-gradient(135deg, var(--sun-yellow), var(--sun-orange));
+      color: white;
+      border: none;
+      padding: 13px 30px;
+      border-radius: 50px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(251, 133, 0, 0.3);
+      transition: 0.25s;
+    }
+
+    .btn-next:hover {
+      transform: translateX(-4px) scale(1.03);
+    }
+
+    .btn-prev {
+      background: #fff8e7;
+      color: var(--sun-brown);
+      border: 1.5px solid var(--sun-yellow);
+      padding: 11px 25px;
+      border-radius: 50px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-prev:hover {
+      background: #fefae0;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin: 25px 0;
+    }
+
+    .secret-card {
+      background: #fff8e7;
+      border: 2px solid var(--sun-yellow);
+      border-radius: 22px;
+      padding: 25px 18px;
+      cursor: pointer;
+      min-height: 175px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: 0.3s;
+    }
+
+    .secret-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(251, 133, 0, 0.15);
+    }
+
+    .secret-card.opened {
+      background: white;
+      border-color: var(--sun-orange);
+    }
+
+    .letter-paper {
+      background: #fffdf9;
+      border: 2px solid var(--sun-yellow);
+      border-radius: 22px;
+      padding: 35px 30px;
+      text-align: right;
+      font-size: 1.2rem;
+      line-height: 2;
+      color: var(--sun-brown);
+    }
+
+    .letter-sig {
+      text-align: left;
+      font-weight: 900;
+      color: var(--sun-orange);
+      margin-top: 20px;
+      font-size: 1.35rem;
+    }
+
+    .coupons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+      margin: 25px 0;
+    }
+
+    .coupon-box {
+      background: #fff8e7;
+      border: 2.5px dashed var(--sun-orange);
+      border-radius: 22px;
+      padding: 25px 18px;
+      transition: 0.3s;
+    }
+
+    .coupon-box:hover {
+      transform: scale(1.02);
+    }
+
+    .claim-btn {
+      background: var(--sun-orange);
+      color: white;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 14px;
+    }
+
+    .arena-box {
+      min-height: 150px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 25px;
+      margin: 25px 0;
+      position: relative;
+    }
+
+    .btn-yes {
+      background: linear-gradient(135deg, var(--sun-yellow), var(--sun-orange));
+      color: white;
+      border: none;
+      padding: 18px 40px;
+      border-radius: 50px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(251, 133, 0, 0.35);
+      z-index: 5;
+    }
+
+    .btn-no {
+      background: #fff8e7;
+      color: var(--sun-brown);
+      border: 2px solid var(--sun-yellow);
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .celeb-card {
+      display: none;
+      background: #fff8e7;
+      border: 2px solid var(--sun-orange);
+      border-radius: 25px;
+      padding: 30px;
+      margin-top: 20px;
+      animation: pageSlide 0.5s ease;
+    }
+
+    @media (max-width: 650px) {
+      h1 { font-size: 2rem; }
+      .page-section { padding: 30px 20px; }
+      .nav-inner { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       إعدادات التخصيص السريعة (عدّل الاسم والأغنية والكلام من هنا)
+       ========================================================= -->
+  <script>
+    const SITE_DATA = {
+      herName: " يانوودى",
+      // حط اسم ملف الأغنية جنب الملف ده (مثلاً "song.mp3") أو رابط مباشر
+      songUrl: "https://www.image2url.com/r2/default/audio/1794864202462-796105e3-3065-41e1-b24d-35796f868423.mp3",
+      songTitle: "أنتى النجم فى الرحله☀️🎶",
+
+      cards: [
+        { icon: "🌻", title: "افتحي الكارت الأول بسرعه", text: "زي ما الورد بيبص للشمس دايماً، قلبي مبيفرحش غير لما يشوف ضحكتك." },
+        { icon: "☀️", title: "والتانى كمان معلش", text: "إنتي أحلى حاجة في الدنيا والله، وزعلك ده مابيهونش عليا" },
+        { icon: "😂", title: "دوسى هنا كمان", text: "حتى وإنتي زعلانه قمر، بس بضحكتك بتخطفي القلب بجد!" },
+        { icon: "🌸", title: "لا انجزى دوسى على اخر واحد", text: "مهما حصل، أنا جنبك فى اى وقت  دايماً لحد ما تضحكي من قلبك." }
+      ],
+
+      letter: [
+        "حبيت أعملك مكان جديد كله ألوان مبهجة وورد بيضحك عشان أقولك إن زعلك غالي عليا أوي.",
+        " أيا كان ايه السبب اللى زعلك فحقك على راسي، ولو الدنيا هي اللي تعبتك فعاندى فيها وقوليلها مش هتقدرى عليا وابدأى يوم جديد كله ضحك.",
+        "كملي باقي الصفحات يلا عشان تعبت خلاص ❤️"
+      ],
+      signature: "اللي بيحب يشوفك دايماً مبسوطة 🌻",
+
+      coupons: [
+        { title: "كوبون خروجة على ذوقك 🚗", desc: "تختاري المكان اللي نفسك فيه وأنا عليا التنفيذ فوراً." },
+        { title: "كوبون أكلة أو حلو بتحبيه 🍫", desc: "أكتر حاجة بتعدل مزاجك توصل لحد عندك. هجبلك 50 قطعه سوشى ياستى ولا تزعلى نفسك" },
+        { title: "كوبون طلب مجاب 👑", desc: "أي طلب تطلبيه النهاردة يتنفذ من غير أي نقاش.او بكره يعنى عادى" },
+        { title: "كوبون ورد حقيقي 🌻", desc: "بوكيه ورد حقيقي يوصلك عشان يكمل جمال ضحكتك.احلى ورد يجيلك ياست البنات " }
+      ],
+
+      jokes: [
+        "لأ مش هتعرفي تدوسي هنا! 😜",
+        "الزرار ده مبيشتغلش للناس القمر 🌻",
+        "حاولي تاني.. برضو هتضحكي 😂",
+        "ممنوع الزعل النهاردة بقرار رسمي!",
+        "خلاص بقى دوسي على التاني وريحيني ❤️"
+      ],
+      finalText: "أيوة كده الدنيا نورت بضحكتك! ربنا يديم فرحتك وما يحرمنيش من ابتسامتك أبداً 🌻☀️❤️"
+    };
+  </script>
+
+  <!-- شاشة الترحيب لبدء الموسيقى تلقائياً -->
+  <div id="welcome-overlay" onclick="startExperience()">
+    <div class="welcome-card">
+      <div id="welcome-flower" style="width:120px; height:120px; margin:0 auto 15px;"></div>
+      <h2 style="color:#fb8500; font-size:1.8rem; margin-bottom:10px;">مفاجأة صغيرة عشانك 🌻</h2>
+      <p style="color:#582f0e; font-size:1.1rem; line-height:1.6;">اضغطي هنا عشان تفتحي الهدية وتسمعي الأغنية 🎶</p>
+      <button class="btn-enter-site">افتحي المفاجأة ✨</button>
+    </div>
+  </div>
+
+  <!-- عنصر الصوت المستمر -->
+  <audio id="bg-audio" loop autoplay></audio>
+
+  <!-- طبقة الزهور في الخلفية -->
+  <div id="garden-bg"></div>
+
+  <!-- شريط التنقل العلوي -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <div class="nav-links">
+        <button class="nav-btn active" onclick="switchPage(1)">١. البداية 🌻</button>
+        <button class="nav-btn" onclick="switchPage(2)">٢. رسايل ليكي 💌</button>
+        <button class="nav-btn" onclick="switchPage(3)">٣. جواب من القلب ✍️</button>
+        <button class="nav-btn" onclick="switchPage(4)">٤. هدايا ومصالحة 🎁</button>
+        <button class="nav-btn" onclick="switchPage(5)">٥. القرار النهائي 😊</button>
+      </div>
+
+      <div class="music-bar">
+        <button class="music-btn" id="music-btn" onclick="toggleSong()">⏸️ إيقاف مؤقت</button>
+        <span class="song-title" id="song-title-ui"></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- محتوى الصفحات الخمسة -->
+  <main class="main-wrapper">
+
+    <!-- ================= الصفحة 1 ================= -->
+    <section class="page-section active" id="page-1">
+      <span class="step-badge">صفحة ١ من ٥</span>
+      <h1 id="p1-title"></h1>
+      <p class="desc-text">ال خمسه ف الميه اشتغلت وقولت اتهد فالبيت احسن بدل مااتجنن وقعدت اعملك حاجه تفرحك☀️</p>
+      
+      <div class="hero-flower-box" id="hero-sunflower" onclick="bloomBurst()"></div>
+      <div class="tap-hint">👆  دوسى على الورده ياورده أو في أي  حته!</div>
+
+      <div class="nav-footer">
+        <span></span>
+        <button class="btn-next" onclick="switchPage(2)">ادخلي الصفحة التانية: رسايل ليكي ⬅️</button>
+      </div>
+    </section>
+
+    <!-- ================= الصفحة 2 ================= -->
+    <section class="page-section" id="page-2">
+      <span class="step-badge">صفحة ٢ من ٥</span>
+      <h1>4 رسايل مستخبية ليكي 💌</h1>
+      <p class="desc-text">اضغطي على كل كارت عشان يتفتح وتشوفي الكلام اللي جواه</p>
+
+      <div class="cards-grid" id="cards-wrap"></div>
+
+      <div class="nav-footer">
+        <button class="btn-prev" onclick="switchPage(1)">➡️ الصفحة السابقة</button>
+        <button class="btn-next" onclick="switchPage(3)">الصفحة التالية: جواب من القلب ⬅️</button>
+      </div>
+    </section>
+
+    <!-- ================= الصفحة 3 ================= -->
+    <section class="page-section" id="page-3">
+      <span class="step-badge">صفحة ٣ من ٥</span>
+      <h1>جواب طالع من القلب ✍️</h1>
+      <div class="letter-paper" id="letter-content"></div>
+
+      <div class="nav-footer">
+        <button class="btn-prev" onclick="switchPage(2)">➡️ الصفحة السابقة</button>
+        <button class="btn-next" onclick="switchPage(4)">الصفحة التالية: هدايا ومصالحة ⬅️</button>
+      </div>
+    </section>
+
+    <!-- ================= الصفحة 4 ================= -->
+    <section class="page-section" id="page-4">
+      <span class="step-badge">صفحة ٤ من ٥</span>
+      <h1>كوبونات مصالحة على حسابي 🎟️</h1>
+      <p class="desc-text">اختاري الكوبونات اللي تعجبك واعمليلها سكرين شوت وابعتيهالي!</p>
+
+      <div class="coupons-grid" id="coupons-wrap"></div>
+
+      <div class="nav-footer">
+        <button class="btn-prev" onclick="switchPage(3)">➡️ الصفحة السابقة</button>
+        <button class="btn-next" onclick="switchPage(5)">الصفحة الأخيرة: القرار النهائي ⬅️</button>
+      </div>
+    </section>
+
+    <!-- ================= الصفحة 5 ================= -->
+    <section class="page-section" id="page-5">
+      <span class="step-badge">صفحة ٥ من ٥</span>
+      <h1>ها.. ضحكتي خلاص ولا لسه؟ 😊</h1>
+      <p class="desc-text">اختاري بصراحة (ابقى قابلينى لو عرفتى تدوسى على الزرار التانى😂)</p>
+
+      <div class="arena-box">
+        <button class="btn-yes" onclick="celebrate()">ضحكت  خلاص 🌻❤️</button>
+        <button class="btn-no" id="run-btn" onmouseover="runAway()" onclick="runAway()">لسه زعلانة 😒</button>
+      </div>
+
+      <div id="joke-msg" style="font-weight:800; color:#fb8500; font-size:1.2rem; min-height:30px;"></div>
+
+      <div class="celeb-card" id="celeb-box">
+        <div id="celeb-flower" style="width:130px; height:130px; margin:0 auto 15px;"></div>
+        <h2 style="color:#fb8500; margin-bottom:10px; font-size:1.9rem;">أحلى ضحكة في الدنيا! 🎉</h2>
+        <p id="final-p" style="font-size:1.2rem; font-weight:700; color:#582f0e; line-height:1.8;"></p>
+      </div>
+
+      <div class="nav-footer">
+        <button class="btn-prev" onclick="switchPage(4)">➡️ الصفحة السابقة</button>
+        <span></span>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    function getSunflowerSVG() {
+      return `
+        <svg viewBox="0 0 200 200" width="100%" height="100%" class="pop-in">
+          <g fill="#ffb703">
+            ${Array.from({length: 16}, (_, i) => 
+              `<ellipse cx="100" cy="35" rx="12" ry="32" transform="rotate(${i * 22.5} 100 100)" />`
+            ).join('')}
+          </g>
+          <g fill="#fb8500">
+            ${Array.from({length: 16}, (_, i) => 
+              `<ellipse cx="100" cy="40" rx="9" ry="28" transform="rotate(${i * 22.5 + 11.25} 100 100)" />`
+            ).join('')}
+          </g>
+          <circle cx="100" cy="100" r="36" fill="#582f0e" />
+          <circle cx="100" cy="100" r="28" fill="#7f4f24" stroke="#ffb703" stroke-width="2" stroke-dasharray="4 4"/>
+        </svg>
+      `;
+    }
+
+    function getSakuraSVG() {
+      return `
+        <svg viewBox="0 0 200 200" width="100%" height="100%" class="pop-in">
+          <g fill="#ff8fa3">
+            ${Array.from({length: 5}, (_, i) => 
+              `<path d="M100 100 C75 40, 90 20, 100 35 C110 20, 125 40, 100 100 Z" transform="rotate(${i * 72} 100 100)" />`
+            ).join('')}
+          </g>
+          <circle cx="100" cy="100" r="14" fill="#fff0f3" />
+          <circle cx="100" cy="100" r="7" fill="#ffb703" />
+        </svg>
+      `;
+    }
+
+    function spawnFlowerAt(x, y, isSunflower = true) {
+      const layer = document.getElementById('garden-bg');
+      const el = document.createElement('div');
+      const size = 100 + Math.random() * 45;
+      el.className = 'flower-node';
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      el.style.width = size + 'px';
+      el.style.height = size + 'px';
+      el.innerHTML = isSunflower ? getSunflowerSVG() : getSakuraSVG();
+      layer.appendChild(el);
+      if (layer.children.length > 26) layer.removeChild(layer.firstChild);
+    }
+
+    function bloomBurst() {
+      for (let i = 0; i < 6; i++) {
+        setTimeout(() => {
+          spawnFlowerAt(Math.random() * window.innerWidth, Math.random() * window.innerHeight, i % 2 === 0);
+        }, i * 90);
+      }
+    }
+
+    document.getElementById('p1-title').innerText = `عشانك ${SITE_DATA.herName} 🌻`;
+    document.getElementById('song-title-ui').innerText = SITE_DATA.songTitle;
+    document.getElementById('welcome-flower').innerHTML = getSunflowerSVG();
+    document.getElementById('hero-sunflower').innerHTML = getSunflowerSVG();
+    document.getElementById('celeb-flower').innerHTML = getSunflowerSVG();
+    document.getElementById('final-p').innerText = SITE_DATA.finalText;
+
+    const cardsWrap = document.getElementById('cards-wrap');
+    SITE_DATA.cards.forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'secret-card';
+      div.innerHTML = `<div style="font-size:2.5rem; margin-bottom:10px;">${c.icon}</div><div style="font-weight:800; color:#582f0e;">${c.title}</div>`;
+      div.onclick = function() {
+        this.classList.add('opened');
+        this.innerHTML = `<div style="font-size:1.05rem; font-weight:700; line-height:1.6; color:#3d2c2e;">${c.text}</div>`;
+        spawnFlowerAt(Math.random() * window.innerWidth, Math.random() * window.innerHeight, true);
+      };
+      cardsWrap.appendChild(div);
+    });
+
+    const letterBox = document.getElementById('letter-content');
+    SITE_DATA.letter.forEach(line => {
+      letterBox.innerHTML += `<p style="margin-bottom:15px;">${line}</p>`;
+    });
+    letterBox.innerHTML += `<div class="letter-sig">${SITE_DATA.signature}</div>`;
+
+    const couponsWrap = document.getElementById('coupons-wrap');
+    SITE_DATA.coupons.forEach(cp => {
+      const div = document.createElement('div');
+      div.className = 'coupon-box';
+      div.innerHTML = `<h3 style="color:#582f0e; margin-bottom:8px;">${cp.title}</h3><p style="font-size:0.95rem;">${cp.desc}</p><button class="claim-btn">احجزي الكوبون 🎁</button>`;
+      div.querySelector('button').onclick = function() {
+        this.style.background = '#2b9348';
+        this.innerText = 'تم الحجز بنجاح ✅';
+      };
+      couponsWrap.appendChild(div);
+    });
+
+    function switchPage(num) {
+      document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+      document.getElementById(`page-${num}`).classList.add('active');
+      document.querySelectorAll('.nav-btn')[num - 1].classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // =========================================================
+    // تشغيل الأغنية تلقائياً
+    // =========================================================
+    const bgAudio = document.getElementById('bg-audio');
+    bgAudio.src = SITE_DATA.songUrl;
+    let isPlaying = false;
+
+    function playAudioNow() {
+      const btn = document.getElementById('music-btn');
+      bgAudio.play().then(() => {
+        isPlaying = true;
+        btn.innerText = "⏸️ إيقاف مؤقت";
+        document.getElementById('welcome-overlay').classList.add('hidden');
+      }).catch(() => {
+        isPlaying = false;
+        btn.innerText = "▶️ تشغيل الأغنية";
+      });
+    }
+
+    function startExperience() {
+      document.getElementById('welcome-overlay').classList.add('hidden');
+      playAudioNow();
+      bloomBurst();
+    }
+
+    function toggleSong() {
+      const btn = document.getElementById('music-btn');
+      if (isPlaying) {
+        bgAudio.pause();
+        btn.innerText = "▶️ تشغيل الأغنية";
+        isPlaying = false;
+      } else {
+        playAudioNow();
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('button') || e.target.closest('.secret-card') || e.target.closest('.hero-flower-box') || e.target.closest('#welcome-overlay')) return;
+      spawnFlowerAt(e.clientX, e.clientY, Math.random() > 0.4);
+    });
+
+    let jIdx = 0;
+    function runAway() {
+      const btn = document.getElementById('run-btn');
+      btn.style.transform = `translate(${(Math.random() - 0.5) * 250}px, ${(Math.random() - 0.5) * 150}px)`;
+      document.getElementById('joke-msg').innerText = SITE_DATA.jokes[jIdx % SITE_DATA.jokes.length];
+      jIdx++;
+    }
+
+    function celebrate() {
+      document.getElementById('run-btn').style.display = 'none';
+      document.getElementById('celeb-box').style.display = 'block';
+      document.getElementById('joke-msg').innerText = '';
+      if (!isPlaying) playAudioNow();
+      for (let i = 0; i < 16; i++) {
+        setTimeout(() => spawnFlowerAt(Math.random() * window.innerWidth, Math.random() * window.innerHeight, i % 2 === 0), i * 90);
+      }
+    }
+
+    window.addEventListener('load', () => {
+      // محاولة التشغيل التلقائي المباشر لو المتصفح يسمح
+      playAudioNow();
+
+      const corners = [
+        [80, 130], [window.innerWidth - 80, 130],
+        [80, window.innerHeight - 90], [window.innerWidth - 80, window.innerHeight - 90]
+      ];
+      corners.forEach((pos, idx) => spawnFlowerAt(pos[0], pos[1], idx % 2 === 0));
+    });
+  </script>
+</body>
+</html>
